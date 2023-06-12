@@ -1,0 +1,27 @@
+@require(path_for, count)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@path_for('static',path='style.css')">
+    <title>Counter</title>
+</head>
+<body>
+    <button id="back-btn" onclick="location.href='/'">Back</button>
+    <h1 id="title">Counter</h1>
+    <div class="container">
+        <button id="add-btn" class="operation-btns" onclick="addFunction()">+</button>
+        <button id="subtract-btn" class="operation-btns" onclick="subtractFunction()">-</button>
+        <h2 id="question">Enter </h2>
+        <h2 id="result-h2">@count</h2>
+        <button id="confirm-btn" onclick="confirmFunction()">Confirm</button>
+    </div>
+    <br>
+
+
+
+    <script src="@path_for('static',path='counter.js')"></script>
+</body>
+</html>

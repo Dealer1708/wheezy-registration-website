@@ -1,0 +1,27 @@
+@require(path_for)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@path_for('static',path='style.css')">
+    <title>Leaderboard</title>
+    <script src="@path_for('static',path='leaderboard.js')"></script>
+</head>
+<header>
+    <div class="header-area">
+        <h1 class="home-btn" onclick="location.href='/home'">Home</h1>
+        <button class="logout-btn" id="home-login-btns" onclick="location.href='/logout'" style="margin: 20px auto;">Logout</button>
+    </div>
+    <hr>
+</header>
+<body>
+    <table id="score-table">
+        <tr>
+            <td><b>&nbsp&nbsp&nbsp&nbspName&nbsp&nbsp&nbsp&nbsp</b></td>
+            <td><b>High Score</b></td>
+        </tr>
+    </table>
+</body>
+</html>

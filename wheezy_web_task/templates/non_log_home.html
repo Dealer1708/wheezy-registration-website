@@ -1,0 +1,22 @@
+@require(path_for)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@path_for('static',path='style.css')">
+    <title>Home</title>
+</head>
+<body>
+    <div class="signin-signup-btns">
+        <!-- Login -->
+        <button id="home-login-btns" onclick="location.href='/login'">Login</button>
+        <!-- Register -->
+        <button id="home-login-btns" onclick="location.href='/register'">Sign Up</button> 
+    </div>
+    
+</body>
+</html>
+
+@end

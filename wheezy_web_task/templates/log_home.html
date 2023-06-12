@@ -1,0 +1,28 @@
+@require(path_for, login)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@path_for('static',path='style.css')">
+    <title>Home</title>
+</head>
+
+<header>
+    <div class="header-area">
+        <h1 class="home-btn" style="cursor: default;">Hello, @login</h1>
+        <button class="logout-btn" id="home-login-btns" onclick="location.href='/logout'" style="margin: 20px auto;">Logout</button>
+    </div>
+    <hr>
+</header>
+<body>
+    <div style="display: flex; justify-content: center;">
+        <div class="dashboard">
+            <button id="home-login-btns" onclick="location.href='/leaderboard'">Leaderboard</button>
+            <button id="home-login-btns" onclick="location.href='/snake'">Snake</button>
+            <button id="home-login-btns" onclick="location.href='/scores'">My scores</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+@require(path_for, login, score)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@path_for('static',path='style.css')">
+    <link rel="stylesheet" href="@path_for('static',path='snake_style.css')">
+    <title>Snake</title>
+    <script src="@path_for('static',path='snake_script.js')" defer></script>
+</head>
+<header>
+    <div class="header-area">
+        <h1 class="home-btn" onclick="location.href='/home'">Home</h1>
+        <button class="logout-btn" id="home-login-btns" onclick="location.href='/logout'" style="margin: 20px auto;">Logout</button>
+    </div>
+    <hr>
+</header>
+<body>
+    <div class="wrapper">
+        <div class="game-details">
+            <span class="score">Score: 0</span>
+            <span class="high-score">High Score: @str(score)</span>
+        </div>
+        <div class="play-board"></div>
+        <div class="controls">
+            <i data-key="ArrowLeft"></i>
+            <i data-key="ArrowUp"></i>
+            <i data-key="ArrowRight"></i>
+            <i data-key="ArrowDown"></i>
+        </div>
+    </div>
+    <div class="leaderboard">
+        <p style="font-size: 20px; color: #343a40;">Highest Score</p>
+        <p>@login - <b id="highScore">@str(score)</b></p>
+    </div>
+    
+    
+</body>
+</html>

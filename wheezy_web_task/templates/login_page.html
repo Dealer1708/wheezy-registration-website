@@ -1,0 +1,32 @@
+@require(path_for)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@path_for('static',path='style.css')">
+    <title>Login</title>
+</head>
+<body>
+    <h1 onclick="location.href='/home'" style="cursor: pointer; text-align: center; margin: 20px;">Home</h1>
+    <form onsubmit="return false;" class="container" id="login_form" autocomplete="off">
+        <hr>
+        <div class="login-field">
+            <label for="email"><b>Login</b></label>
+            <br>
+            <input type="text", name="login" placeholder="Login", required autofocus>
+        <br>
+            <label for="psw"><b>Password</b></label>
+            <input type="password", name="password" placeholder="Password", required>
+        <br>
+            <button type="submit" class="login-btn" onclick="submitLoginForm()">Login</button>
+        <br>
+            <p id="error-text"></p>
+        <br>
+            <p class="sign-up-p">Don't have an account? <a onclick="location.href='/register'">Sign Up</a></p>
+        </div>
+    </form>
+    <script src="@path_for('static',path='registration.js')"></script>
+</body>
+</html>
