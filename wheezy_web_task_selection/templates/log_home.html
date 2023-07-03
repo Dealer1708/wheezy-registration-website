@@ -23,7 +23,7 @@
             @if user_rights[0] == 'super':
                 <button id="home-login-btns" onclick="location.href='/changerights'">Change Rights</button>
                 @end
-            @if len(user_rights) < len(all_roles) and user_rights[0] != "super":
+            @if len(user_rights) < len(all_roles) - 1 and user_rights[0] != "super":
                 <button id="home-login-btns" onclick="location.href='/requestrights'">Send Request</button>
         </div>
     </div>
