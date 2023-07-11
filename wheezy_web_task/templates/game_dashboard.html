@@ -1,0 +1,21 @@
+@extends("base.html")
+@require(path_for, login)
+
+@def content():
+
+    <header>
+        <div class="header-area">
+            <h1 class="home-btn" style="cursor: default; position: relative;">@login</h1>
+            <button class="logout-btn" id="home-login-btns" onclick="location.href='/logout'" style="margin: 20px auto;">Logout</button>
+        </div>
+        <button class="logout-btn" id="home-login-btns" onclick="location.href='/home'" style="margin: 20px; position: relative;  top: -70px;">Back</button>
+        <hr style="position: relative; top: -70px;">
+    </header>
+
+        <div style="display: flex; justify-content: center;">
+            <div class="dashboard">
+                <button id="home-login-btns" onclick="location.href='/snake'">Snake</button>
+                <button id="home-login-btns" onclick="location.href='/scores'">My scores</button>
+            </div>
+        </div>
+@end

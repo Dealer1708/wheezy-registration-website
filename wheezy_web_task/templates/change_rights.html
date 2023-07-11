@@ -1,0 +1,81 @@
+@extends("base.html")
+@require(path_for, right, login, requests, roles)
+@def content():
+
+    <title>Change Rights</title>
+    <header>
+        <div class="header-area">
+            <h1 class="home-btn" onclick="location.href='/home'">Home</h1>
+            <button class="logout-btn" id="home-login-btns" onclick="location.href='/logout'" style="margin: 20px auto;">Logout</button>
+        </div>
+        <hr>
+    </header>
+        <form onsubmit="return false;" class="container" id="role_form" autocomplete="off">
+            <table id="score-table">
+                <tr>
+                    <td><b>Name</b></td>
+                    <td><b>Rights</b></td>
+                    <td><b>Requested Role</b></td>
+                </tr>
+                
+
+                @for i in range(len(right)):
+                    <tr id="data-tr"><td id="logins@str(i)">@login[i]</td><td id="td@str(i)">
+                    @if right[i][0] == "super":
+                        <h3>SUPER</h3>
+                    @endif
+                    @if right[i][0] != "super":
+                        <div id="dropdown@str(i)" class="dropdown">
+                            <button id="dropdown-toggle@str(i)" class="dropdown-toggle">Select Roles</button>
+                            <div id="dropdown-menu@str(i)" style="display: none;" class="dropdown-menu">
+                                @for role in roles:
+                                    @if role != "super":
+                                    <label>
+                                    <input type="checkbox" id="@role@str(i)" value="@role">
+                                        @role.capitalize()
+                                    </label>
+                                    @endif
+                                    @if len(right[i]) > 1:
+                                        @for j in range(len(right[i])):
+                                            @if right[i][j] == role:
+                                                    <script>document.getElementById("@role@str(i)").setAttribute("checked","")</script>
+                                                    @endif                   
+                                @endfor
+                                    @else:
+                                    @if right[i][0] == role:
+                                        <script>document.getElementById("@role@str(i)").setAttribute("checked","")</script>
+                                    @endif
+                                    @endif
+                                @endfor
+                                @endif
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        @if right[i][0] != "super":
+                            @if requests[i][0] != None: 
+                                <div id="dropdown-req@str(i)" class="dropdown">
+                                    <button id="dropdown-toggle-req@str(i)" class="dropdown-toggle">Select Roles</button>
+                                    <div id="dropdown-menu-req@str(i)" style="display: none;" class="dropdown-menu">
+                                    @for j in range(len(requests[i])):
+                                        <label id="@requests[i][j]">
+                                        @requests[i][j].capitalize()
+                                        <button style="width: auto; height: auto;" id="approve@requests[i][j]@str(i)" class="@requests[i][j]">&#9989;</button>
+                                        <button style="width: auto; height: auto;" id="deny@requests[i][j]@str(i)" class="@requests[i][j]">&#10060;</button>
+                                        </label>
+                                    @endfor
+                            @else:
+                                <h3>No requests</h3>
+                            @endif
+                        @endif
+                                
+                    </div>
+                </td>
+            </tr>
+                @endfor
+            </table>
+            <button type="submit" id="submit-btn">Submit</button>
+        </form>
+        <script src="@path_for('static',path='changer_rights.js')"></script>
+@end

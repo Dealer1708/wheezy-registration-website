@@ -1,0 +1,32 @@
+@extends("base.html")
+@require(path_for)
+
+@def content():
+    <title>Sign Up</title>
+
+        <h1 onclick="location.href='/home'" style="cursor: pointer; text-align: center;  margin: 20px;">Home</h1>
+        <form onsubmit="return false;" class="container" id="sign_up_form" autocomplete="off">
+            <hr>
+            <div class="reg-field">
+                    <label for="email"><b>Login</b></label>
+                    <br>
+                    <input type="text" id="login" name="login" placeholder="Login" required autocomplete="off" autofocus>
+                <br>
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" name="password" id="password" placeholder="Password" required autocomplete="off">
+                <br>
+                    <label for="psw-repeat"><b>Repeat Password</b></label>
+                    <input type="password" name="verify" id="verify" placeholder="Repeat Password" required autocomplete="off">
+                <br>
+                    
+                    <button type="submit" class="reg-btn" onclick="sumbitRegForm()">Sign Up</button>
+                <br>
+                    <p id="error-text"></p>
+                <br>
+                    <p class="login-p">Already have an account? <a onclick="location.href='/login'">Login</a></p>
+            </form>
+            <br>
+        </div>
+
+        <script src="@path_for('static',path='registration.js')"></script>
+@end
