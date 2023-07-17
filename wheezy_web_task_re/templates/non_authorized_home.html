@@ -1,0 +1,11 @@
+@extends("base.html")
+@require(path_for)
+
+@def content():
+    <title>Home</title>
+        <div class="signin-signup-btns">
+            <button id="home-login-btns" onclick="location.href='/login'">Login</button>
+            <button id="home-login-btns" onclick="location.href='/register'">Sign Up</button> 
+        </div>
+    
+@end

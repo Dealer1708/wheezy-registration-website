@@ -1,0 +1,42 @@
+@extends("base.html")
+@require(path_for, login, rights, roles)
+
+@def content():
+    <title>Home</title>
+    <header>
+        <div class="header-area">
+            <h1 class="home-btn" style="cursor: default; position: relative;">Hello, @login</h1>
+            <button class="logout-btn" id="home-login-btns" onclick="location.href='/logout'" style="margin: 20px auto;">Logout</button>
+        </div>
+        <button class="logout-btn" id="home-login-btns" onclick="location.href='/home'" style="margin: 20px; position: relative;  top: -70px;">Back</button>
+        <hr style="position: relative; top: -70px;">
+    </header>
+
+        <label for="req-select">Choose a request type:</label>
+        <div id="dropdown-req" class="dropdown">
+        <button id="dropdown-toggle-req" class="dropdown-toggle">Select Roles</button>
+        <div id="dropdown-menu-req" style="display: none;" class="dropdown-menu">
+        @for role in roles:
+        @if role != "super":
+        <label>
+            <input type="checkbox" id="@role" value="@role">
+                @role.capitalize()
+        </label>
+                @for right in rights:
+                    @if role == right:
+                        <script>document.getElementById("@role").setAttribute("disabled","")</script>
+                    @endif
+                @endfor
+            @endif
+        @endfor
+        </div>
+        </div>
+        
+        <div style="display: flex; justify-content: center;">
+            <div class="dashboard">
+                <button type="submit" id="submit-btn" onclick="submitRequestForm()">Submit</button>
+            </div>
+        </div>
+
+        <script src="@path_for('static',path='send_request.js')"></script>
+@end

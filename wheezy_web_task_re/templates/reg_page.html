@@ -1,0 +1,41 @@
+@extends("base.html")
+@require(registration, path_for, script ,errors)
+
+<!-- @def head_content():
+    <script src="@path_for('static',path='registration.js')" defer></script>
+@end -->
+
+@def content():
+    @script
+    <title>Sign Up</title>
+        <h1 onclick="location.href='/home'" class="home-bttn">Home</h1>
+        <form action="register" class="container" id="sign_up_form" autocomplete="off" method="post">
+            <hr>
+            <div class="reg-field">
+                <p>
+                    @registration.login.label("Login")
+                    @registration.login.textbox(placeholder="Login")
+                    @registration.login.error(id="error-span")
+                </p>
+                <p>
+                    @registration.password.label("Password")
+                    @registration.password.password(placeholder="Password")
+                    @registration.password.error(id="error-span")
+                </p>
+                <p>
+                    @registration.verify.label("Repeat Password")
+                    @registration.verify.password(placeholder="Repeat Password")
+                    @registration.verify.error(id="error-span")
+                </p>
+                <p>
+                    <input type="submit" class="reg-btn" value="Sign Up">
+                </p>
+
+                <p class="login-p">
+                    Already have an account?
+                    <a href='/login'>Login</a>
+                </p>
+
+            </div>
+        </form><br>
+@end
