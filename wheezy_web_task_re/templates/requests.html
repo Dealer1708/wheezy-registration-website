@@ -1,0 +1,54 @@
+@extends("base.html")
+@require(path_for, login, rights, roles, req_model, errors)
+
+
+@def header_content():
+        <a href='/logout' class="btn btn-warning">Logout</a>
+@end
+
+@def content():
+    <title>Role Request</title>
+    <main class="form-signin">
+    <form action="requestrights" method="post">
+        <p>
+            <label class="h3 mb-3 fw-normal" for="req-select">Choose a request type:</label>
+            
+            <div class="btn-group">
+                <button style="width: 10rem;" class="btn btn-lg btn-secondary dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    Select
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside">
+                    @for role in roles:
+                        @if role != "super":
+                        <li class="dropdown-item w-100 h-100 user-select-none">
+                            <label class="w-100 form-check-label"> 
+                                @req_model.request.checkbox(class="form-check-input mx-1 @role")
+                                @role.capitalize()
+                                <script>
+                                    document.querySelector(".@role").setAttribute("value","@role")
+                                    document.querySelector(".@role").setAttribute("id","@role")
+                                    document.querySelector(".@role").removeAttribute("checked","checked")
+                                </script>
+                            </label>
+                        </li>
+                            @for right in rights:
+                                @if role == right:
+                                    <script>document.getElementById("@role").setAttribute("disabled","")</script>
+                                @endif
+                            @endfor
+                        @endif
+                    @endfor
+                </ul>
+            </div>
+            </p>
+            <p>
+                <input type="submit" class="w-100 btn btn-lg btn-primary" id="submit-btn"></input>
+            </p>
+        </form>
+        </main>
+        <div style="display: flex; justify-content: center;">
+            <div class="dashboard">
+            </div>
+        </div>
+        <!-- <script src="@path_for('static',path='send_request.js')"></script> -->
+@end

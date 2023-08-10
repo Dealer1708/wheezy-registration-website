@@ -1,0 +1,28 @@
+@extends("base.html")
+@require(path_for, stats)
+
+
+@def header_content():
+        <a href='/logout' class="btn btn-warning">Logout</a>
+@end
+
+@def content():
+    <title>My Scores</title>
+
+        <table id="score-table" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th><b>Score</b></th>
+                    <th><b>Time</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for stat in stats:
+                    <tr>
+                        <td>@str(stat["score"])</td>
+                        <td>@str(stat["date"])</td>
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
+@end

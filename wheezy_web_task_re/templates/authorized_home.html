@@ -1,0 +1,29 @@
+@extends("base.html")
+@require(path_for, login, rights, roles)
+
+
+@def header_content():
+        <a href='/logout' class="btn btn-warning">Logout</a>
+@end
+
+@def content():
+    <title>Home</title>
+
+    
+    <div style="display: flex; justify-content: center;">
+        <section class="p-4 text-center w-100">
+            @if "admin" in rights or "super" in rights :
+                <button type="button" class="btn btn-lg btn-primary me-1" onclick="location.href='/validator'">VALIDATOR</button>
+            @endif
+            @if "gamer" in rights or "super" in rights:
+                <button type="button" class="btn btn-lg btn-primary me-1" onclick="location.href='/games'">Games</button>
+            @endif
+            @if rights[0] == 'super':
+                <button type="button" class="btn btn-lg btn-primary me-1" onclick="location.href='/changerights'">Change Rights</button>
+            @endif
+            @if len(rights) < len(roles) - 1 and rights[0] != "super":
+            <button type="button" class="btn btn-lg btn-primary me-1" onclick="location.href='/requestrights'">Send Request</button>
+            @endif
+        </section>
+    </div>
+@end

@@ -1,0 +1,31 @@
+@extends("base.html")
+@require(path_for, login_model, errors)
+
+@def content():
+    <title>Login</title>
+    <main class="form-signin">
+        <form action="login" class="container" id="login_form" autocomplete="off" method="post">
+            <h1 class="h3 mb-3 fw-normal">Login</h1>
+                <div class="form-floating">
+                    @login_model.login.textbox(placeholder="Login" class="form-control")
+                    @login_model.login.label('Login')
+                </div>
+                <div class="form-floating">
+                    @login_model.password.password(placeholder="Password" class="form-control")
+                    @login_model.password.label("Password")
+                </div>
+                    @if errors:
+                        <p class="text-danger" id="error-span">@errors["errors"]</p>
+                    @endif
+            <p>
+                <input type="submit" class="w-100 btn btn-lg btn-primary" value="Login">
+            </p>
+    
+                <p class="sign-up-p">
+                    Don't have an account?
+                    <a href='/register'>Sign Up</a>
+                </p>
+        </form>
+    </main> 
+    
+@end

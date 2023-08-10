@@ -1,0 +1,41 @@
+@extends("base.html")
+@require(registration, path_for, errors)
+
+@def content():
+    <title>Sign Up</title>
+    <main class="form-signin">
+        <form action="register" class="container" id="sign_up_form" autocomplete="off" method="post">
+            <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
+            <div class="reg-field">
+                <div class="form-floating">
+                    @registration.login.textbox(placeholder="Login" class="form-control")
+                    @registration.login.label("Login")
+                </div>
+                <div class="form-floating">
+                    @registration.password.password(placeholder="Password" class="form-control")
+                    @registration.password.label("Password")
+                </div>
+                <div class="form-floating">
+                    @registration.verify.password(placeholder="Repeat Password" class="form-control")
+                    @registration.verify.label("Repeat Password")
+                </div>
+                    @if errors:
+                    <ul class="text-start">
+                        @for error in errors['errors']:
+
+                        <li class="text-danger" id="error-span">@error</li>
+                        @endfor
+                    </ul>
+                    @endif
+                <p>
+                    <input type="submit" class="w-100 btn btn-lg btn-primary" value="Sign Up">
+                </p>
+
+                <p class="login-p">
+                    Already have an account?
+                    <a href='/login'>Login</a>
+                </p>
+            </div>
+        </form>
+    </main>
+@end
