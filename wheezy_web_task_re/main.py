@@ -1,188 +1,146 @@
+import os
 import json
-import bcrypt
-import sqlite3
-from config import ticket
-from wheezy.security import Principal
-
-def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
+from db import DataBase
+from json_validation import validation_func
 
 
-class Users():
-    def __init__(self):
-        db = sqlite3.connect('data.db')
-        db.row_factory = dict_factory
-        self.cursor = db.cursor()
-    
-    def change(self,sql_query,login={}):
-        db = sqlite3.connect('data.db')
-        db.row_factory = dict_factory
-        self.cursor = db.cursor()
-        self.cursor.execute(f"""{sql_query}""",login)
-        db.commit()
-        db.close()
-
-    def select(self,sql_query,login={}, fetch_method="fetchone"):
-        db = sqlite3.connect('data.db')
-        db.row_factory = dict_factory
-        self.cursor = db.cursor()
-        self.cursor.execute(f"""{sql_query}""",login)
-
-
-    def check_username(self, login: str) -> object:
+class Users(DataBase):
+        
+    def check_username(self, login: str) -> dict:
         """
         Check Username
         -----------
         Parameters
         login : str
         -----------
-        return object
+        return dict
         """
-        self.select(
+        return self.select(
             """
                 SELECT login FROM users
                 WHERE login=:login 
             """,
-            {'login': login}
+            values={"login": login},
         )
-        result = self.cursor.fetchone()
-        self.close_cursor()
-        return result
+
         
-    def sign_up(self, login: str, password: str, rights: str) -> int:
+    def sign_up(self, login: str, password: str):
         """
         Adding new user to db
         -----------
         Parameters
         login : str
         password : str
-        -----------
-        return int
         """
         self.change(
             """
                 INSERT INTO users (login, password, score, rights, request)
-                VALUES (:login, :password, 0, :rights, '[]')
+                VALUES (:login, :password, 0, '[""]', '[]')
             """,
-            {'login':login, "password": password, "rights": rights}
+            {'login':login, "password": password}
         )
 
 
-    def get_user_data(self, login: str) -> object:
+    def get_user_data(self, login: str) -> dict:
         """
         Logging
         -----------
         Parameters
         login : str
         -----------
-        return object
+        return dict
         """
-        self.select(
+        return self.select(
             """
                 SELECT id, login, password FROM users
                 WHERE login = :login
             """, 
-            {"login": login}
+            values = {"login": login},
         )
-
-        result = self.cursor.fetchone()
-        self.close_cursor()
-        return result
+        
     
-    def get_password(self, login: str) -> bytes:
+    def get_password(self, login: str) -> dict:
         """
         Getting encrypted password
         -----------
         Parameters
         login : str
         -----------
-        return bytes
+        return dict
         """
-        self.select(
+        return self.select(
             """
                 SELECT login, password FROM users
                 WHERE login = :login
             """,
-            {"login": login}
+            values = {"login": login},
         )
 
-        result = self.cursor.fetchone()
-        self.close_cursor()
-        return result
     
-    def score_amount(self, login: str) -> object:
+    def score_amount(self, login: str) -> int:
         """
         Get score of user, rights
         -----------
         Parameters
         login : str
         -----------
-        return object
+        return int
         """
-        self.select(
+        return self.select(
             """
                 SELECT score FROM users
                 WHERE login = :login
             """, 
-            {"login": login}
+            values={"login": login},
+            key="score"
         )
 
-        result = self.cursor.fetchone()["score"]
-        self.close_cursor()
-        return result
 
-    def get_login(self, id: str) -> object:
+
+    def get_login(self, id: str) -> str:
         """
         Get id, login from db
         -----------
         Parameters
         id : str
         -----------
-        return object
+        return str
         """
-        self.select(
+        return self.select(
             """
                 SELECT login FROM users
                 WHERE id = :id
             """, 
-            {"id": id}
+            values={"id": id},
+            key="login"
         )
 
-        result = self.cursor.fetchone()["login"]
-        self.close_cursor()
-        return result
+
     
-    def get_no_super_logins(self) -> object:
+    def get_no_super_logins(self) -> list:
         """
-        Get logins from db
+        Get all logins from db except 'super'
         -----------
         Parameters
         -----------
-        return object
+        return list
         """
-        self.select(
+        return self.select(
             """
                 SELECT login FROM users
                 WHERE rights != '["super"]'
-            """
+            """,
+            fetch_method="all"
         )
 
-        result = self.cursor.fetchall()
-        self.close_cursor()
-        return result
 
-    def high_score_update(self, score: int, id: str) -> int:
+    def high_score_update(self, score: int, id: str):
         """
         Update High Score of user
         -----------
         Parameters
         score : int
         id : str
-        -----------
-        return int
         """
         self.change(
             """
@@ -193,7 +151,7 @@ class Users():
             {'score':score, 'id':id}
         )
 
-    def score_insert(self, id: str, score: int, time: str) -> int:
+    def score_insert(self, id: str, score: int, time: str):
         """
         Insert score data of user
         -----------
@@ -201,8 +159,6 @@ class Users():
         id : str
         score : int
         time : str
-        -----------
-        return int
         """
         self.change(
             """
@@ -212,45 +168,41 @@ class Users():
             {'id': id, 'score': score, 'time': time}
         )
 
-    def get_stats(self, id: str) -> int:
+    def get_stats(self, id: str) -> object:
             """
             Get Stats
             -----------
             Parameters
             id : str
             -----------
-            return int
+            return object
             """
-            self.select(
+            return self.select(
                 """
                     SELECT score, date FROM stats
                     WHERE userID = :id
                 """,
-                {'id': id}
+                values = {'id': id},
+                fetch_method="all"
             )
-            
-            return self.cursor
     
-    def get_high_scores(self):
+    def get_high_scores(self) -> list:
             """
             Order and return HighScores
             -----------
             Parameters
             -----------
-            return int
+            return list
             """
-            self.select(
+            return self.select(
                  """
                     SELECT login, score FROM users
                     ORDER BY score DESC;
-                 """
+                 """,
+                fetch_method="all"
             )
-
-            result = self.cursor.fetchall()
-            self.close_cursor()
-            return result
         
-    def get_rights(self, login: str) -> object:
+    def get_rights(self, login: str) -> str:
         
         """
         Get rights of user
@@ -258,43 +210,39 @@ class Users():
         Parameters
         login : str
         -----------
-        return object
+        return str
         """
-        self.select(
+        return self.select(
             """
                 SELECT rights FROM users
                 WHERE login = :login
             """, 
-            {"login": login}
+            values = {"login": login},
+            key = "rights"
         )
-
-        result = self.cursor.fetchone()["rights"]
-        self.close_cursor()
-        return result
     
-    def get_all_rights(self) -> object:
+    def get_all_rights(self) -> list:
         """
         Get rights of user
         -----------
         Parameters
         login : str
         -----------
-        return object
+        return list
         """
-        self.select("SELECT login, rights FROM users")
+        return self.select(
+            "SELECT login, rights FROM users",
+            fetch_method = "all"
+        )
 
-        result = self.cursor.fetchall()
-        return result
     
-    def change_roles(self, login: str, role: str) -> object:
+    def change_roles(self, login: str, role: str = '[""]'):
         """
         Changing roles of the user
         -----------
         Parameters
         login : str
         role : str
-        -----------
-        return object
         """
         self.change(
             """
@@ -306,7 +254,7 @@ class Users():
             {"login":login, "role": role}
         )
 
-    def insert_errors(self, user_id: int, error: str, fixed: int) -> object:
+    def insert_errors(self, user_id: int, error: str, fixed: int):
         """
         Insert Errors for Validator
         -----------
@@ -314,8 +262,6 @@ class Users():
         user_id : int
         error : str
         fixed : int
-        -----------
-        return object
         """
         self.change(
             """
@@ -328,28 +274,25 @@ class Users():
             {"user_id": user_id, "error": error, "fixed": fixed}
         )
     
-    def get_errors(self, user_id: int) -> object:
+    def get_errors(self, user_id: int) -> list:
         """
         Getting Errors by user_id
         -----------
         Parameters
         user_id : int
         -----------
-        return object
+        return list
         """
-        self.select(
+        return self.select(
             """
                 SELECT errors, fixed FROM error_list
                 WHERE user_id = :user_id
             """,
-            {"user_id": user_id}
+            values = {"user_id": user_id},
+            fetch_method = "all"
         )
-
-        result = self.cursor.fetchall()
-        self.close_cursor()
-        return result
     
-    def update_errors(self, user_id: int, error: str, fixed: int) -> object:
+    def update_errors(self, user_id: int, error: str, fixed: int):
         """
         Update Errors for Validator
         -----------
@@ -357,8 +300,6 @@ class Users():
         user_id : int
         error : str
         fixed : int
-        -----------
-        return object
         """
         self.change(
             """
@@ -369,15 +310,13 @@ class Users():
             {"user_id":user_id, "error": error, "fixed": fixed}
         )
     
-    def post_requests(self, login: str, request: str) -> object:
+    def post_requests(self, login: str, request: str):
         """
         Update requests column
         -----------
         Parameters
         login : str
         request: str
-        -----------
-        return object
         """
         self.change(
             """
@@ -388,133 +327,125 @@ class Users():
             {"login":login,"request": request}
         )
 
-    def get_all_requests(self) -> object:
+    def get_all_requests(self) -> list:
         """
         Get requests of user
         -----------
         Parameters
         -----------
-        return object
+        return list
         """
 
-        self.select("SELECT request FROM users")
+        return self.select(
+            "SELECT request FROM users",
+            fetch_method = "all"
+        )
 
-        result = self.cursor.fetchall()
-        self.close_cursor()
-        return result
 
-    def get_request(self, login: str) -> object:
+    def get_request(self, login: str) -> str:
         """
         Get requests by login
         -----------
         Parameters
         login : str
         -----------
-        return object
+        return str
         """
 
-        self.select(
+        return self.select(
             """
                 SELECT request FROM users
                 WHERE login=:login
             """,
-            {"login":login}
+            values = {"login": login},
+            key = "request"
         )
-
-        result = self.cursor.fetchone()["request"]
-        self.close_cursor()
-        return result
-
-    def set_request_null(self, login: str) -> object:
+    
+    def delete_user(self, user_id: int):
         """
-        Set requests to [] by login
+        Delete user from table
         -----------
         Parameters
-        login : str
-        -----------
-        return object
+        user_id : int
         """
+        self.change(
+            """
+                DELETE FROM users
+                WHERE id=:user_id
+            """,
+            values= {"user_id": user_id}
+        )
 
         self.change(
             """
-                UPDATE users set request = '[]'
-                WHERE login =:login
+                DELETE FROM error_list
+                WHERE user_id=:user_id
             """,
-            {"login":login}
+            values= {"user_id": user_id}
         )
 
-    # def login_name_validation(self, login: str):
-    #     """
-    #     JS inject Protection
-    #     -----------
-    #     Parameters
-    #     login : str
-    #     -----------
-    #     return object
-    #     """
-    #     login = login\
-    #         .replace("<", "&lt;")\
-    #         .replace(">", "&gt;")\
-    #         .replace('"', "&quot;")\
-    #         .replace("'", "&#39;")
+        self.change(
+            """
+                DELETE FROM stats
+                WHERE userID=:user_id
+            """,
+            values= {"user_id": user_id}
+        )
 
-    #     return login
 
-    def html_decrypt(self, login: str):
-        db = sqlite3.connect('data.db')
-        db.row_factory = dict_factory
-        self.cursor = db.cursor()
-        login = login\
-            .replace("&lt;", "<")\
-            .replace("&gt;", ">")\
-            .replace("&quot;", '"')\
-            .replace("&#39;", "'")\
-            .replace("%22", '"')
+class Main:
+    def updateErrors(self, user_id):
+        users = Users()
+        fixed = 0
+        error_list = validation_func("temp/temp.json")
+        user_data = users.get_errors(user_id)
+        for user in user_data:
+            if user["errors"] not in error_list:
+                fixed = 1
+                users.update_errors(user_id, user["errors"], fixed)
+            elif user["fixed"]:
+                fixed = 0
+                users.update_errors(user_id, user["errors"], fixed)
+        for error in error_list:
+            users.insert_errors(user_id, error, fixed)
+        if os.path.exists("temp/temp.json"):
+            os.remove("temp/temp.json")
 
-        return login
-    
-    def sign_up_validation(self, login: str, password: str, verify: str) -> dict:
-        db = sqlite3.connect('data.db')
-        db.row_factory = dict_factory
-        self.cursor = db.cursor()
-        status = True
-        message = ""
+    def changeRights(self, model):
+        users = Users()
+        rights_dict = {}
+        old_req = []
+        for item in model.rights:
+            item = json.loads(item)
+            key = list(item.keys())[0]
+            value = list(item.values())[0]
+            if key in rights_dict:
+                rights_dict[key].append(value)
+            else:
+                rights_dict[key] = [value]
 
-        if login == "" or password == "":
-            status = False
-            message = "Please, fill all the fields."
+        usr_data = users.get_no_super_logins()
+        login_list = []
+        for data in usr_data:
+            login_list.append(data["login"])
 
-        if len(password) < 8:
-            status = False
-            message = "Password needs to have atleast 8 characters"
+        for usr in login_list:
+            if not usr in rights_dict:
+                users.change_roles(usr)
 
-        else:
-            capital_letter_in_psw = False
-            digit_in_psw = False
-            for symbol in password:
-                if symbol.isdigit():
-                    digit_in_psw = True
-                if symbol.isupper():
-                    capital_letter_in_psw = True
+        for login in rights_dict:
+            rights = json.dumps(rights_dict[login])
+            users.change_roles(login, rights)
 
-            if not capital_letter_in_psw:
-                status = False
-                message = "Password needs to have atleast 1 capital letter"
-            if not digit_in_psw:
-                status = False
-                message = "Password needs to have atleast 1 digit"
-            
-        if password != verify:
-            status = False
-            message = "Passwords don't match"
+            req = json.loads(users.get_request(login))
+            old_req = json.loads(users.get_request(login))
 
-        if self.check_username(login):
-            status = False
-            message = "Login exists"
-
-        return {"status":status, "message":message}
-    
-    def close_cursor(self):
-        db = sqlite3.connect('data.db')
-        db.row_factory = dict_factory
-        db.close()
+            if len(req) > 0:
+                for request in req:
+                    if request in rights:
+                        old_req.remove(request)
+                
+                users.post_requests(
+                    login=login,
+                    request=json.dumps(old_req)
+                )

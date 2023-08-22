@@ -13,93 +13,94 @@
                 <thead>
                     <tr>
                         <th><b>Name</b></th>
+                        <th></th>
                         <th><b>Rights</b></th>
                     </tr>
                 </thead>
-                <tbody>
-                @for i in range(len(right)):
-                    <tr id="data-tr"><td class="login-td" id="logins@str(i)">@login[i]</td><td class="rights-td" id="td@str(i)">
-                    @if "super" in right[i]:
-                        <h3 style="margin: 0;">SUPER</h3>
-                    @endif
-                    @if "super" not in right[i]:
-                    <div class="btn-group">
-                        <button style="width: 10rem;" class="btn btn-secondary dropdown-toggle position-relative" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                            Select
-                            @if len(requests[i]) >= 1:
-                                <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"></span>
-                            @endif
-                        </button>
-
-
-
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside">
-                            @for role in roles:
-                            @if role != "super":
-                            <li class="dropdown-item w-100 h-100 user-select-none">
-                                <label class="w-100 form-check-label position-relative">   
-                                    @rights_model.rights.checkbox(class="form-check-input mx-1 @role@str(i)")
-                                    @role.capitalize()
-                                    @if len(requests[i]) >= 1:
-                                        @for request in requests[i]:
-                                            @if request == role:
-                                            <span class="position-absolute start-100 top-50 translate-middle p-2 bg-danger rounded-circle"></span>
-                                            @endif
-                                        @endfor
-                                    @endif
-                                    <script>
-                                        console.log("@str(login[i])")
-                                        document.querySelector(".@role@str(i)").setAttribute("value",'{"@login[i]": "@role"}')
-                                        document.querySelector(".@role@str(i)").removeAttribute("checked","checked")
-                                    </script>
-                                </label>
-                            </li>
-                            @endif
-                            @if len(right[i]) > 1:
-                                @for j in range(len(right[i])):
-                                    @if right[i][j] == role:
-                                            <script>document.querySelector(".@role@str(i)").setAttribute("checked","")</script>
-                                            @endif                   
-                                @endfor
+                    <tbody>
+                    @for i in range(len(right)):
+                        <tr id="data-tr"><td class="login-td" id="logins@str(i)"><h5 class="mb-0 mt-2">@login[i]</h5>
+                            @if "super" not in right[i]:
+                            <td style="width: 10px;">
+                                <div class="modal fade" id="modal@str(i)" tabindex="-1" aria-labelledby="modal@str(i)" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="modal@str(i)">Delete @login[i]</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p>Are you sure you want to delete @login[i]?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                          <button name="login" type="submit" class="btn btn-danger" value="@login[i]">Delete</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal@str(i)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3 mb-1" viewBox="0 0 16 16">
+                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                      </svg>
+                                  </button>
+                            </td>
                             @else:
-                            @if right[i][0] == role:
-                                <script>document.querySelector(".@role@str(i)").setAttribute("checked","")</script>
+                            <td></td>
                             @endif
-                            @endif
-                        @endfor
-                    </ul>
-                </div>
-                <!-- <button type="button" class="btn btn-lg btn-primary">Edit</button> -->
-                @endif
-                </td>
-                <!-- <td class="req-td">
-                    <div>
-                        @if "super" not in right[i]:
-                            @if len(requests[i]) >= 1: 
-                            <div class="btn-group">
-                                <button style="width: 10rem;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                    Request
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside">
-                                    @for j in range(len(requests[i])):
-                                    <li class="dropdown-item w-100 h-100 user-select-none">
-                                        <label class="w-100 form-check-label">   
-                                            @requests[i][j].capitalize()
-                                        </label>
-                                    </li>
-                                    @endfor
-                            @else:
-                                <h3 style="margin: 0;">No requests</h3>
-                            @endif
+                            </td><td class="rights-td" id="td@str(i)">
+                        @if "super" in right[i]:
+                            <h4 class="m-0">SUPER</h4>
                         @endif
+                        @if "super" not in right[i]:
+                        <div class="btn-group">
+                            <button style="width: 10rem;" class="btn btn-secondary dropdown-toggle position-relative" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                Select
+                                @if len(requests[i]) >= 1:
+                                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle"></span>
+                                @endif
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableInside">
+                                @for role in roles:
+                                @if role != "super":
+                                <li class="dropdown-item w-100 h-100 user-select-none">
+                                    <label class="w-100 form-check-label position-relative">   
+                                        @rights_model.rights.checkbox(class="form-check-input mx-1 @role@str(i)")
+                                        @role.capitalize()
+                                        @if len(requests[i]) >= 1:
+                                            @for request in requests[i]:
+                                                @if request == role:
+                                                <span class="position-absolute start-100 top-50 translate-middle p-2 bg-danger rounded-circle"></span>
+                                                @endif
+                                            @endfor
+                                        @endif
+                                        <script>
+                                            document.querySelector(".@role@str(i)").setAttribute("value",'{"@login[i]": "@role"}')
+                                            document.querySelector(".@role@str(i)").removeAttribute("checked","checked")
+                                        </script>
+                                    </label>
+                                </li>
+                                @endif
+                                @if len(right[i]) > 1:
+                                    @for j in range(len(right[i])):
+                                        @if right[i][j] == role:
+                                                <script>document.querySelector(".@role@str(i)").setAttribute("checked","")</script>
+                                                @endif                   
+                                    @endfor
+                                @else:
+                                @if right[i][0] == role:
+                                    <script>document.querySelector(".@role@str(i)").setAttribute("checked","")</script>
+                                @endif
+                                @endif
+                            @endfor
                         </ul>
                     </div>
-                </td> -->
-            </tr>
+                    @endif
+                    </td>
+                </tr>
                 @endfor
-        </tbody>
+            </tbody>
         </table>
-        <input type="submit" class="btn btn-lg btn-primary" value="Submit">
+        <input type="submit" class="btn btn-lg btn-primary mb-2" value="Submit">
     </form>
-    <script src="@path_for('static',path='changer_rights.js')"></script>
 @end

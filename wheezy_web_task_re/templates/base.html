@@ -3,31 +3,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="@path_for('static',path='style.css')" />
     <link rel="stylesheet" href="@path_for('static',path='bootstrap.min.css')">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-
     @def head_content():
     @end
     @head_content()
   </head>
   <body class="text-center">
       <header class="p-3 bg-dark text-white">
-          <div class=" ml-0">
+          <div class="ml-0">
               <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                   <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                       <li>
                           <a href="/home" class="nav-link px-2 text-white">Home</a>
                       </li>
-                      <!-- <li>
-                          <a href="/validator" class="nav-link px-2 text-white">Validator</a>
-                      </li>
-                      <li>
-                          <a href="/games" class="nav-link px-2 text-white">Games</a>
-                      </li> -->
                   </ul>
                   @def header_content():
                   @end
@@ -39,6 +28,5 @@
       @end
       @content()
     <script src="@path_for('static', path='bootstrap.bundle.min.js')"></script>
-
 </body>
 </html>

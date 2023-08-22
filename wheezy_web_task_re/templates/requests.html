@@ -1,5 +1,5 @@
 @extends("base.html")
-@require(path_for, login, rights, roles, req_model, errors)
+@require(path_for, login, rights, roles, model, errors)
 
 
 @def header_content():
@@ -22,7 +22,7 @@
                         @if role != "super":
                         <li class="dropdown-item w-100 h-100 user-select-none">
                             <label class="w-100 form-check-label"> 
-                                @req_model.request.checkbox(class="form-check-input mx-1 @role")
+                                @model.request.checkbox(class="form-check-input mx-1 @role")
                                 @role.capitalize()
                                 <script>
                                     document.querySelector(".@role").setAttribute("value","@role")
@@ -46,9 +46,8 @@
             </p>
         </form>
         </main>
-        <div style="display: flex; justify-content: center;">
+        <div class="container">
             <div class="dashboard">
             </div>
         </div>
-        <!-- <script src="@path_for('static',path='send_request.js')"></script> -->
 @end
