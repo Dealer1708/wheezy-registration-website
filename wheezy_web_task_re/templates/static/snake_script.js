@@ -19,8 +19,8 @@ function HighScoreData(score){
 }
 
 const updateFoodPosition = () => {
-    foodX = Math.floor(Math.random() * 30) + 1;
-    foodY = Math.floor(Math.random() * 30) + 1;
+    foodX = Math.floor(Math.random() * 29) + 1;
+    foodY = Math.floor(Math.random() * 29) + 1;
 }
 
 const handleGameOver = () => {
@@ -32,7 +32,7 @@ const handleGameOver = () => {
     else{
         newHighScore.append("highscore", previousHighScore);
     }
-        fetch("snake/user", {
+        fetch("snake", {
             body: newHighScore,
             method: "post"
         })
@@ -57,11 +57,6 @@ const changeDirection = e => {
     }
 }
 
-controls.forEach(button => button.addEventListener("click",
-    () => changeDirection({ key: button.dataset.key })
-    )
-);
-
 const initGame = () => {
     if(gameOver) return handleGameOver();
     let html = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
@@ -71,7 +66,6 @@ const initGame = () => {
         snakeBody.push([foodY, foodX]);
         score++;
         highScore = score >= highScore ? score : highScore;
-        localStorage.setItem("high-score", highScore);
         scoreElement.innerText = `Score: ${score}`;
         highScoreElement.innerText = `High Score: ${highScore}`;
     }
@@ -98,4 +92,4 @@ const initGame = () => {
 
 updateFoodPosition();
 setIntervalId = setInterval(initGame, 100);
-document.addEventListener("keyup", changeDirection);
+document.addEventListener("keydown", changeDirection);

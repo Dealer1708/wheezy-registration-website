@@ -1,27 +1,3 @@
-// const selectItemsPerPage = document.getElementById("items-on-page")
-// const tableRows = document.getElementsByTagName("tr")
-// let itemsOnPage = 5
-
-// selectItemsPerPage.addEventListener("change", function(){
-//   itemsOnPage = selectItemsPerPage.value
-// })
-
-// document.getElementById("filters").addEventListener("click", function(){
-//     const items = document.getElementById("filter-nav")
-//     if(items.style.display == "none"){
-//       items.style.display = "flex"
-//       items.style.zIndex = 0
-//       return
-//     }
-//     else{
-//       const items = document.getElementById("filter-nav")
-//       items.style.zIndex = -1
-//       items.style.display = "none"
-//       return
-//     }
-//   })
-
-
 const fixedCheckBox = document.getElementById("fixed")
 const nonFixedCheckBox = document.getElementById("non-fixed")
 const selectItemsPerPage = document.getElementById("items-on-page")
@@ -74,10 +50,6 @@ function Run(){
   fetch("get/errors", {method: "post"})
     .then((data) => {return data.json()})
     .then((data) => {
-    // let listItems = []
-    // for (let i = 0; i < data["errors"].length; i++){
-    //   listItems.push(data["errors"][i])
-    // }
     const paginationNumbers = document.getElementById("pagination-numbers");
     const prevButton = document.getElementById("prev-button");
     const listContainer = document.getElementById("list-container");
@@ -120,6 +92,7 @@ function Run(){
     if (i < filteredItems["errors"].length) {
       const item = document.createElement('td');
       const fixed_item = document.createElement('td');
+      fixed_item.classList.add("h4")
       const itemTR = document.createElement('tr');
       item.textContent = filteredItems["errors"][i];
       item.setAttribute(

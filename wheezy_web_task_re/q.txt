@@ -1,0 +1,8 @@
+Work done:
+    - Removed fetch in js
+    - Form submit thru models and wheezy widgets
+    - Cookie files added
+    - Removed 5 useless handlers
+    - New method of login & registration form validation added
+    - DB cursor close added  
+    - Bootstrap added

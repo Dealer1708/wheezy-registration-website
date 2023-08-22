@@ -1,5 +1,5 @@
 @extends("base.html")
-@require(registration, path_for, errors)
+@require(path_for, model, errors)
 
 @def content():
     <title>Sign Up</title>
@@ -8,23 +8,20 @@
             <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
             <div class="reg-field">
                 <div class="form-floating">
-                    @registration.login.textbox(placeholder="Login" class="form-control")
-                    @registration.login.label("Login")
+                    @model.login.textbox(placeholder="Login" class="form-control")
+                    @model.login.label("Login")
                 </div>
                 <div class="form-floating">
-                    @registration.password.password(placeholder="Password" class="form-control")
-                    @registration.password.label("Password")
+                    @model.password.password(placeholder="Password" class="form-control")
+                    @model.password.label("Password")
                 </div>
                 <div class="form-floating">
-                    @registration.verify.password(placeholder="Repeat Password" class="form-control")
-                    @registration.verify.label("Repeat Password")
+                    @model.verify.password(placeholder="Repeat Password" class="form-control")
+                    @model.verify.label("Repeat Password")
                 </div>
                     @if errors:
                     <ul class="text-start">
-                        @for error in errors['errors']:
-
-                        <li class="text-danger" id="error-span">@error</li>
-                        @endfor
+                        <li class="text-danger" id="error-span">@str(errors["errors"])</li>
                     </ul>
                     @endif
                 <p>

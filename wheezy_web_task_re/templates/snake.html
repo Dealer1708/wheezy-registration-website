@@ -26,12 +26,6 @@
                     <span class="high-score">High Score: @str(score)</span>
                 </div>
                 <div class="play-board"></div>
-                <div class="controls">
-                    <i data-key="ArrowLeft"></i>
-                    <i data-key="ArrowUp"></i>
-                    <i data-key="ArrowRight"></i>
-                    <i data-key="ArrowDown"></i>
-                </div>
             </div>
 
             <div class="leaderboard">
@@ -44,7 +38,7 @@
                     <tbody>
                     @for i in range(len(stats)):
                         <tr>
-                            <td>@stats[i]["login"].replace("'", "&#39;").replace('"', "&quot;").replace(">", "&gt;").replace("<", "&lt;")</td>
+                            <td>@stats[i]["login"]</td>
                             <td>@str(stats[i]["score"])</td>
                         </tr>
                     @endfor

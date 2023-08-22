@@ -1,3 +1,5 @@
+from wheezy.html.utils import escape_html
+
 class Registration():
     def __init__(self):
         self.login = ""
@@ -7,8 +9,8 @@ class Registration():
 
 class Login():
     def __init__(self):
-        self.login = ""
-        self.password = ""
+        self.login = escape_html("")
+        self.password = escape_html("")
 
 
 class Rights():
